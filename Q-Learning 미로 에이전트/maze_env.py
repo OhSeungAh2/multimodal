@@ -17,6 +17,8 @@ STEP_REWARD = -1
 WALL_REWARD = -5
 GOAL_REWARD = 100
 
+# 미로를 여러 스테이지를 만들고싶다면 이걸 여러 개의 문자열 튜플로 만들어서 선택하도록 하면 됨
+# 벽은 #으로 표시, 시작점은 S, 목표점은 G, 이동 가능한 칸은 .으로 표시
 MAZE_TEXT = (
     "##########",
     "#S..#....#",
@@ -31,6 +33,7 @@ MAZE_TEXT = (
 )
 
 
+# 만든 MAZE_TEXT를 기반으로 미로 구성함(숫자로 바꿈)
 def build_maze(lines):
     if not lines:
         raise ValueError("미로가 비어 있습니다.")
@@ -77,6 +80,7 @@ class MazeEnv:
         self.cols = len(self.grid[0])
         self.pos = self.start
 
+    # 환경을 초기화하고 시작 위치를 반환함
     def reset(self):
         self.pos = self.start
         return self.pos
@@ -96,6 +100,8 @@ class MazeEnv:
                     cells.append((row, col))
         return cells
 
+    # 행동을 하나씩 실행하고, 그에 대한 결과를 Return시켜줌
+    # :: 3개를 Return시키는데 = 다음 상태 값, 보상, 종료 여부
     def step(self, action):
         if action not in (UP, DOWN, LEFT, RIGHT):
             raise ValueError(f"행동은 0, 1, 2, 3 중 하나여야 합니다. 받은 값: {action}")
